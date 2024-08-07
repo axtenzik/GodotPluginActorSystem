@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Electronova.Generic
 {
     [Tool]
-    public partial class JumpPerformer : Performer
+    public partial class JumpPerformer : Node, IStateTree
     {
         private AnimationPlayer player;
 
@@ -34,6 +34,11 @@ namespace Electronova.Generic
             }
         }
 
+        [ExportCategory("State Tree")]
+        [Export] StringName performerState = null;
+
+        public StringName State => performerState;
+
         public override string[] _GetConfigurationWarnings()
         {
             List<String> list = new();
@@ -45,7 +50,7 @@ namespace Electronova.Generic
             return strings;
         }
 
-        public override void Tick()
+        public void Tick()
         {
             Jump();
             actorState.State = setActorStateTo;

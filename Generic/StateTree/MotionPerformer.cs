@@ -5,7 +5,7 @@ using System;
 namespace Electronova.Generic
 {
     [Tool]
-    public partial class MotionPerformer : Performer
+    public partial class MotionPerformer : Node, IStateTree
     {
         [ExportCategory("Actor")]
         [Export] Actor Parent;
@@ -16,7 +16,12 @@ namespace Electronova.Generic
         [Export] float duration;
         [Export] Vector3 direction;
 
-        public override void Tick()
+        [ExportCategory("State Tree")]
+        [Export] StringName performerState = null;
+
+        public StringName State => performerState;
+
+        public void Tick()
         {
             if (GetChildCount() == 0)
             {

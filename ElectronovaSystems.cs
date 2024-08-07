@@ -82,55 +82,80 @@ namespace Electronova
             Script script;
             Texture2D texture;
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/AnimationWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/AimRotator.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png");
+            AddCustomType("AimRotator", "Node", script, texture);
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/AnimationWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png");
             AddCustomType("AnimationWaiter", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/Changer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Changer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Changer.png");
             AddCustomType("Changer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/DirectionSelector.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/DirectionSelector.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/DirectionSelector.png");
             AddCustomType("DirectionSelector", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/Empty.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Empty.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Empty.png");
             AddCustomType("Empty", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/Performer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/ImpulsePerformer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
-            AddCustomType("Performer", "Node", script, texture);
+            AddCustomType("ImpulsePerformer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/Rotator.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/JumpChanger.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Changer.png");
+            AddCustomType("JumpChanger", "Node", script, texture);
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/JumpPerformer.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
+            AddCustomType("JumpPerformer", "Node", script, texture);
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MotionPerformer.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
+            AddCustomType("MotionPerformer", "Node", script, texture);
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MovementPerformer.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
+            AddCustomType("MovementPerformer", "Node", script, texture);
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MoveRotator.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png");
             AddCustomType("Rotator", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/Sequencer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Sequencer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Sequencer.png");
             AddCustomType("Sequencer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/StateSelector.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/StateSelector.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Selector.png");
             AddCustomType("StateSelector", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/StepWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/StepWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Counter.png");
             AddCustomType("StepWaiter", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Base/TimeWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/TimeWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png");
             AddCustomType("TimeWaiter", "Node", script, texture);
         }
 
         private void StateTreeRemove()
         {
+            RemoveCustomType("AimRotator");
             RemoveCustomType("AnimationWaiter");
             RemoveCustomType("Changer");
             RemoveCustomType("DirectionSelector");
             RemoveCustomType("Empty");
-            RemoveCustomType("Performer");
-            RemoveCustomType("Rotator");
+            RemoveCustomType("ImpulsePerformer");
+            RemoveCustomType("JumpChanger");
+            RemoveCustomType("JumpPerformer");
+            RemoveCustomType("MotionPerformer");
+            RemoveCustomType("MovementPerformer");
+            RemoveCustomType("MoveRotator");
             RemoveCustomType("Sequencer");
             RemoveCustomType("StateSelector");
             RemoveCustomType("StepWaiter");

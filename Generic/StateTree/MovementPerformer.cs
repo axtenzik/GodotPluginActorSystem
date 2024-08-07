@@ -8,7 +8,7 @@ namespace Electronova.Generic
     /// State tree performer node that will move an actor toward a desired direction based on acceleration.
     /// </summary>
     [Tool]
-    public partial class MovementPerformer : Performer
+    public partial class MovementPerformer : Node, IStateTree
     {
         [ExportCategory("Actor")]
         [Export] Actor parent;
@@ -17,11 +17,16 @@ namespace Electronova.Generic
         [ExportCategory("Movement Type")]
         [Export] MovementProperties movementProperties = null;
 
+        [ExportCategory("State Tree")]
+        [Export] StringName performerState = null;
+
+        public StringName State => performerState;
+
         Vector3 forwardAxis;
         Vector3 rightAxis;
         Vector3 desiredVelocity;
 
-        public override void Tick()
+        public void Tick()
         {
             FindDesiredVelocity();
             AdjustVelocity();

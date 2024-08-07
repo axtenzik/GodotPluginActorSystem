@@ -5,12 +5,25 @@ using System;
 namespace Electronova.Generic
 {
     [Tool]
-    public partial class JumpChanger : Changer
+    public partial class JumpChanger : Node, IStateTree
     {
         [ExportCategory("JumpChanger")]
         [Export] JumpStats jumpStats;
 
-        public override void Tick()
+        [ExportCategory("State Tree")]
+        [Export] StringName changerState = null;
+
+        [ExportCategory("Changer")]
+        [Export] StringName desiredState = null;
+        [Export] StateString StateToChange { get; set; }
+
+        [ExportCategory("Animation")]
+        [Export] StringName desiredAnimation = null;
+        [Export] AnimationPlayer Player { get; set; }
+
+        public StringName State => changerState;
+
+        public void Tick()
         {
             Change();
 

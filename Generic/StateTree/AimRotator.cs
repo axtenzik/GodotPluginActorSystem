@@ -6,10 +6,15 @@ using System.Collections.Generic;
 namespace Electronova.Generic
 {
     [Tool]
-    public partial class AimRotator : Rotator
+    public partial class AimRotator : Node, IStateTree
     {
         [ExportCategory("Rotator")]
         [Export] Actor parent;
+
+        [ExportCategory("State Tree")]
+        [Export] StringName rotatorState = null;
+
+        public StringName State => rotatorState;
 
         Vector3 forwardAxis;
 
@@ -24,7 +29,7 @@ namespace Electronova.Generic
             return strings;
         }
 
-        public override void Tick()
+        public void Tick()
         {
             if (parent.ControllingCamera != null)
             {

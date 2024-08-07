@@ -5,11 +5,16 @@ using System;
 namespace Electronova.Generic
 {
     [Tool]
-    public partial class MoveRotator : Rotator
+    public partial class MoveRotator : Node, IStateTree
     {
         [Export] Actor parent;
 
-        public override void Tick()
+        [ExportCategory("State Tree")]
+        [Export] StringName rotatorState = null;
+
+        public StringName State => rotatorState;
+
+        public void Tick()
         {
             if (parent.Velocity.LengthSquared() < 0.01f)
             {
