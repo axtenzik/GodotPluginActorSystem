@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class Sequencer : Node, IStateTree
@@ -24,9 +24,10 @@ namespace Electronova.Generic
 
         public virtual void Tick()
         {
+            IStateTree selectedChild = null;
             for (int i = 0; i < GetChildCount(); i++)
             {
-                IStateTree selectedChild = (IStateTree)GetChild(i);
+                selectedChild = (IStateTree)GetChild(i);
                 selectedChild?.Tick();
             }
         }

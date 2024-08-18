@@ -9,17 +9,6 @@ namespace Electronova.Actors
     {
         [Export] InputState inputState;
 
-        //public Vector2 CurrentMove { get; private set; }
-        //public Vector2 CurrentAim { get; private set; }
-        //public Vector2 BufferedMove { get; private set; }
-        //public Vector2 BufferedAim { get; private set; }
-
-        public override void _Ready()
-        {
-            /*BufferedAim = Vector2.Zero;
-            BufferedMove = Vector2.Zero;*/
-        }
-
         public override void _Process(double delta)
         {
             if (Engine.IsEditorHint())

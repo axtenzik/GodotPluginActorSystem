@@ -1,9 +1,9 @@
-using Electronova.Actors;
+using Electronova.Generic;
 using Godot;
 using System;
 using System.Linq;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class DirectionSelector : Node, IStateTree

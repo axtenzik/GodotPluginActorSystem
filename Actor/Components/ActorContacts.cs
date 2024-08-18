@@ -6,13 +6,13 @@ using System;
 namespace Electronova.Actors
 {
     [Tool]
-    public partial class ActorUpdate : Node
+    public partial class ActorContacts : Node
     {
         [Export] Actor Parent { get; set; }
         [Export] JumpStats JumpStatistics { get; set; }
 
         [ExportCategory("StateStrings")]
-        [Export] public StateString InFluidState { get; set; }
+        //[Export] public StateString InFluidState { get; set; }
         [Export] public StateString ContactState { get; set; }
 
         [ExportCategory("Ground Handling")]
@@ -41,8 +41,13 @@ namespace Electronova.Actors
             minTraversalDotProduct = Mathf.Cos(Mathf.DegToRad(maxTraversalAngle));
         }
 
-        public void Update()
+        public override void _PhysicsProcess(double delta)
         {
+            if (Engine.IsEditorHint())
+            {
+                return;
+            }
+
             Clear();
             EvaluateCollisions();
             UpdateContacts();
@@ -73,6 +78,12 @@ namespace Electronova.Actors
 
         void EvaluateCollisions()
         {
+            //Early return due to first physics frame being before actor sets BodyState
+            if (Parent.BodyState == null)
+            {
+                return;
+            }
+
             for (int i = 0; i < Parent.BodyState.GetContactCount(); i++)
             {
                 CollisionObject3D obj = (CollisionObject3D)Parent.BodyState.GetContactColliderObject(i);
@@ -160,8 +171,9 @@ namespace Electronova.Actors
 
             if (dot > 0f)
             {
-                Vector3 velocity = (Parent.Velocity - rayHitNormal * dot).Normalized() * speed;
-                Parent.SetVelocity(velocity);
+                Vector3 velocity = (Parent.Velocity - rayHitNormal * dot).Normalized() * speed; //desired velocity
+                velocity -= Parent.Velocity; //current velocity
+                Parent.AddVelocity(velocity); //Once added should be desired velocity
             }
 
             return true;

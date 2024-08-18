@@ -32,34 +32,34 @@ namespace Electronova
 
             script = GD.Load<Script>("res://addons/Electronova/Actor/Actor.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/Actor.png");
-            AddCustomType("Rb3DActor", "RigidBody3D", script, texture);
+            AddCustomType("Actor", "RigidBody3D", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actor/ActorInput.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Components/ActorInput.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorInput.png");
             AddCustomType("ActorInput", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actor/ActorUpdate.cs");
-            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorUpdate.png");
-            AddCustomType("ActorUpdate", "Node", script, texture);
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Components/ActorContacts.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorContacts.png");
+            AddCustomType("ActorContacts", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actor/JumpProperties.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Properties/JumpProperties.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorStats.png");
             AddCustomType("JumpProperties", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actor/JumpStats.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Stats/JumpStats.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorStats.png");
             AddCustomType("JumpStats", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actor/MovementProperties.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Properties/MovementProperties.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Actor/ActorStats.png");
             AddCustomType("MovementProperties", "Node", script, texture);
         }
 
         private void ActorRemove()
         {
-            RemoveCustomType("Rb3DActor");
+            RemoveCustomType("Actor");
             RemoveCustomType("ActorInput");
-            RemoveCustomType("ActorUpdate");
+            RemoveCustomType("ActorContacts");
             RemoveCustomType("JumpProperties");
             RemoveCustomType("JumpStats");
             RemoveCustomType("MovementProperties");
@@ -82,63 +82,63 @@ namespace Electronova
             Script script;
             Texture2D texture;
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/AimRotator.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Rotate/AimRotator.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png");
             AddCustomType("AimRotator", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/AnimationWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Wait/AnimationWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png");
             AddCustomType("AnimationWaiter", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Changer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Change/Changer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Changer.png");
             AddCustomType("Changer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/DirectionSelector.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Condition/DirectionSelector.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/DirectionSelector.png");
             AddCustomType("DirectionSelector", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Empty.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Generic/Empty.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Empty.png");
             AddCustomType("Empty", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/ImpulsePerformer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Move/ImpulsePerformer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
             AddCustomType("ImpulsePerformer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/JumpChanger.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Change/JumpChanger.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Changer.png");
             AddCustomType("JumpChanger", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/JumpPerformer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Move/JumpPerformer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
             AddCustomType("JumpPerformer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MotionPerformer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Move/MotionPerformer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
             AddCustomType("MotionPerformer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MovementPerformer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Move/MovementPerformer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Performer.png");
             AddCustomType("MovementPerformer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/MoveRotator.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Rotate/MoveRotator.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png");
             AddCustomType("Rotator", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/Sequencer.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Condition/Sequencer.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Sequencer.png");
             AddCustomType("Sequencer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/StateSelector.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Condition/StateSelector.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Selector.png");
             AddCustomType("StateSelector", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/StepWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Wait/StepWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Counter.png");
             AddCustomType("StepWaiter", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Generic/StateTree/TimeWaiter.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actor/Utility/StateTree/Wait/TimeWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png");
             AddCustomType("TimeWaiter", "Node", script, texture);
         }

@@ -1,10 +1,10 @@
-using Electronova.Actors;
+using Electronova.Generic;
 using Electronova.World;
 using Godot;
 using System;
 using System.Collections.Generic;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class JumpPerformer : Node, IStateTree
@@ -13,6 +13,7 @@ namespace Electronova.Generic
 
         [ExportCategory("Actor")]
         [Export] Actor parent;
+        [Export] ActorContacts actorContacts;
         [Export] StateString actorState;
         [Export] StateString ContactState;
 
@@ -70,12 +71,12 @@ namespace Electronova.Generic
             if (ContactState.State == Strings.OnGround)
             {
                 jumpStats.ResetJumps();
-                jumpDirection = parent.Updater.ContactNormal;
+                jumpDirection = actorContacts.ContactNormal;
             }
             else if (ContactState.State == Strings.OnSteep)
             {
                 jumpStats.ResetJumps();
-                jumpDirection = parent.Updater.SteepNormal;
+                jumpDirection = actorContacts.SteepNormal;
             }
             else if (jumpProperties.MaxAirJumps > 0 && jumpStats.CurrentJump <= jumpProperties.MaxAirJumps)
             {
@@ -84,7 +85,7 @@ namespace Electronova.Generic
                     jumpStats.AddJump();
                 }
 
-                jumpDirection = parent.Updater.ContactNormal;
+                jumpDirection = actorContacts.ContactNormal;
             }
             else
             {

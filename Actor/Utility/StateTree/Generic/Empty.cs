@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class Empty : Node, IStateTree

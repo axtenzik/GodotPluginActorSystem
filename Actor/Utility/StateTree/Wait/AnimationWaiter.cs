@@ -1,47 +1,45 @@
+using Electronova.Generic;
 using Godot;
 using System;
 using System.Linq;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
-    public partial class StateSelector : Node, IStateTree
+    public partial class AnimationWaiter : Node, IStateTree
     {
         [ExportCategory("State Tree")]
-        [Export] StringName selectorState = null;
+        [Export] StringName waiterState = null;
         [Export] StateString ChildStateType { get; set; }
 
-        public StringName State => selectorState;
+        [ExportCategory("AnimationWaiter")]
+        [Export] StringName desiredAnimation = null;
+        [Export] StringName animationToWait = null;
+        [Export] AnimationPlayer Player { get; set; }
 
-        public override string[] _GetConfigurationWarnings()
-        {
-            if (GetChildCount() == 0)
-            {
-                string[] strings = { "End of State Tree path. Try adding State Tree nodes as children to add functionality!" };
-                return strings;
-            }
-
-            return Array.Empty<string>();
-        }
+        public StringName State => waiterState;
 
         public void Tick()
         {
+            if (Player.CurrentAnimation == animationToWait)
+            {
+                return;
+            }
+            else if (Player.CurrentAnimation != desiredAnimation)
+            {
+                Player.Play(desiredAnimation);
+            }
+
             if (GetChildCount() == 0)
             {
                 return;
             }
-
-            //GD.Print("");
-            //GD.Print(selectorState + " Selector state");
-            //GD.Print("Looking for: " + ChildStateType.State);
-
+            
             IStateTree selectedChild = null;
             foreach (IStateTree child in GetChildren().Cast<IStateTree>())
             {
-                //GD.Print("Looked at: " + child.State);
                 if (child.State == ChildStateType.State)
                 {
-                    //GD.Print(child.State + " Selected");
                     selectedChild = child;
                     break;
                 }
@@ -54,7 +52,6 @@ namespace Electronova.Generic
             }
             else
             {
-                //GD.Print("No suitable child");
                 //if no valid children, use first one
                 selectedChild = (IStateTree)GetChild(0);
                 selectedChild?.Tick();

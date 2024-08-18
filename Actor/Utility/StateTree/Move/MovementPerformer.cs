@@ -1,8 +1,8 @@
-using Electronova.Actors;
+using Electronova.Generic;
 using Godot;
 using System;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     /// <summary>
     /// State tree performer node that will move an actor toward a desired direction based on acceleration.
@@ -13,6 +13,7 @@ namespace Electronova.Generic
         [ExportCategory("Actor")]
         [Export] Actor parent;
         [Export] InputState inputState;
+        [Export] ActorContacts actorContacts;
 
         [ExportCategory("Movement Type")]
         [Export] MovementProperties movementProperties = null;
@@ -46,8 +47,8 @@ namespace Electronova.Generic
             /*Vector3 xAxis = ProjectDirectionOnPlane(rightAxis, contactNormal);
             Vector3 zAxis = ProjectDirectionOnPlane(forwardAxis, contactNormal);*/
 
-            Vector3 xAxis = rightAxis.ProjectOntoPlane(parent.Updater.ContactNormal);
-            Vector3 zAxis = forwardAxis.ProjectOntoPlane(parent.Updater.ContactNormal);
+            Vector3 xAxis = rightAxis.ProjectOntoPlane(actorContacts.ContactNormal);
+            Vector3 zAxis = forwardAxis.ProjectOntoPlane(actorContacts.ContactNormal);
 
             float currentX = parent.Velocity.Dot(xAxis);
             float currentZ = parent.Velocity.Dot(zAxis);

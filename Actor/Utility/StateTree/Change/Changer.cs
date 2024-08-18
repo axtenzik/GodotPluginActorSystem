@@ -1,7 +1,8 @@
+using Electronova.Generic;
 using Godot;
 using System;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class Changer : Node, IStateTree

@@ -2,6 +2,7 @@ using Electronova.Generic;
 using Electronova.World;
 using Godot;
 using System;
+using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
@@ -9,9 +10,15 @@ namespace Electronova.Actors
     public partial class Actor : RigidBody3D
     {
         [Export] public Node3D ControllingCamera { get; private set; }
-        [Export] public ActorInput Inputter { get; private set; }
-        [Export] public ActorUpdate Updater { get; private set; }
-        [Export] StateSelector StateTreeRoot { get; set; }
+        [Export] Node UtilityRoot
+        {
+            get => (Node)utilityRoot;
+            set
+            {
+                utilityRoot = (IUtilityRoot)value;
+                UpdateConfigurationWarnings();
+            }
+        }
 
         public PhysicsDirectBodyState3D BodyState { get; private set; }
         public Vector3 Force { get; private set; }
@@ -19,11 +26,26 @@ namespace Electronova.Actors
         public Vector3 UpAxis { get; private set; }
         public float DeltaStep { get; private set; }
 
+        //Used for testing
         [Export] StateString actorState;
         [Export] StateString fluidState;
         [Export] StateString contactState;
         [Export] StateString inputState;
         [Export] JumpStats jumpstat;//*/
+
+        private Vector3 bufferedVelocity;
+        private IUtilityRoot utilityRoot;
+
+        public override string[] _GetConfigurationWarnings()
+        {
+            List<String> list = new();
+            if (utilityRoot == null)
+            {
+                list.Add("Utility Root not set to a valid instance of IUtilityRoot");
+            }
+            string[] strings = list.ToArray();
+            return strings;
+        }
 
         public override void _Ready()
         {
@@ -40,8 +62,10 @@ namespace Electronova.Actors
             Velocity = state.LinearVelocity;
             BodyState = state;
 
-            Updater.Update();
-            StateTreeRoot.Tick();
+            Velocity += bufferedVelocity;
+            bufferedVelocity = Vector3.Zero;
+
+            utilityRoot?.Tick();
 
             Velocity += Gravity.GetGravity(Transform.Origin) * DeltaStep;
 
@@ -62,7 +86,7 @@ namespace Electronova.Actors
 
         public void AddVelocity(Vector3 deltaVelocity)
         {
-            Velocity += deltaVelocity;
+            bufferedVelocity += deltaVelocity;
         }
 
         public void SetForce(Vector3 force)

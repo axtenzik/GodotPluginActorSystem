@@ -1,18 +1,18 @@
-using Electronova.Actors;
 using Godot;
 using System;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
-    public partial class ImpulsePerformer : Node, IStateTree
+    public partial class MotionPerformer : Node, IStateTree
     {
         [ExportCategory("Actor")]
         [Export] Actor Parent;
-        [Export] ActorUpdate actorUpdate;
-        
-        [ExportCategory("Impulse")]
+        [Export] ActorContacts actorContacts;
+
+        [ExportCategory("Motion")]
         [Export] float speed;
+        [Export] float duration;
         [Export] Vector3 direction;
 
         [ExportCategory("State Tree")]

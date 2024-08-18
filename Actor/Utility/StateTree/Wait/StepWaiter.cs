@@ -1,8 +1,9 @@
+using Electronova.Generic;
 using Godot;
 using System;
 using System.Collections.Generic;
 
-namespace Electronova.Generic
+namespace Electronova.Actors
 {
     [Tool]
     public partial class StepWaiter : Node, IStateTree
