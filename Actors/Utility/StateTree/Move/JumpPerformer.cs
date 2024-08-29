@@ -2,27 +2,26 @@ using Electronova.Generic;
 using Electronova.World;
 using Godot;
 using System;
-using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
     [Tool]
     public partial class JumpPerformer : Node, IStateTree
     {
-        private AnimationPlayer player;
+        //
 
         [ExportCategory("Actor")]
         [Export] Actor parent;
         [Export] ActorContacts actorContacts;
-        [Export] StateString actorState;
-        [Export] StateString ContactState;
+        [Export] StringNode actorState;
+        [Export] StringNode ContactState;
 
         [ExportCategory("Jump")]
         [Export] StringName setActorStateTo;
         [Export] JumpProperties jumpProperties;
         [Export] JumpStats jumpStats;
 
-        [ExportCategory("Animator")]
+        /*[ExportCategory("Animator")]
         [Export] StringName animationName;
         [Export]
         AnimationPlayer Player
@@ -34,13 +33,12 @@ namespace Electronova.Actors
                 UpdateConfigurationWarnings();
             }
         }
+        
+        private AnimationPlayer player;*/
 
-        [ExportCategory("State Tree")]
-        [Export] StringName performerState = null;
+        public StringName State => Name;
 
-        public StringName State => performerState;
-
-        public override string[] _GetConfigurationWarnings()
+        /*public override string[] _GetConfigurationWarnings()
         {
             List<String> list = new();
             if (player == null)
@@ -49,12 +47,12 @@ namespace Electronova.Actors
             }
             string[] strings = list.ToArray();
             return strings;
-        }
+        }*/
 
         public void Tick()
         {
             Jump();
-            actorState.State = setActorStateTo;
+            actorState.Value = setActorStateTo;
 
             if (GetChildCount() == 0)
             {
@@ -68,12 +66,12 @@ namespace Electronova.Actors
         void Jump()
         {
             Vector3 jumpDirection;
-            if (ContactState.State == Strings.OnGround)
+            if (ContactState.Value == Strings.OnGround)
             {
                 jumpStats.ResetJumps();
                 jumpDirection = actorContacts.ContactNormal;
             }
-            else if (ContactState.State == Strings.OnSteep)
+            else if (ContactState.Value == Strings.OnSteep)
             {
                 jumpStats.ResetJumps();
                 jumpDirection = actorContacts.SteepNormal;
@@ -105,8 +103,6 @@ namespace Electronova.Actors
             }
 
             parent.AddVelocity(jumpDirection.Normalized() * jumpSpeed);
-
-            player?.Play(animationName);
         }
     }
 }

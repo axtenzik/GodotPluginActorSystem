@@ -15,10 +15,7 @@ namespace Electronova.Actors
         [Export] float duration;
         [Export] Vector3 direction;
 
-        [ExportCategory("State Tree")]
-        [Export] StringName performerState = null;
-
-        public StringName State => performerState;
+        public StringName State => Name;
 
         public void Tick()
         {

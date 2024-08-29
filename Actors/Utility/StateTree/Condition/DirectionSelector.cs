@@ -9,12 +9,10 @@ namespace Electronova.Actors
     public partial class DirectionSelector : Node, IStateTree
     {
         [ExportCategory("Direction")]
-        [Export] InputState inputState;
+        [Export] Vector2Node direction;
+        [Export] bool defaultFirstChild = true;
 
-        [ExportCategory("State Tree")]
-        [Export] StringName selectorState = null;
-
-        public StringName State => selectorState;
+        public StringName State => Name;
 
         public void Tick()
         {
@@ -25,9 +23,9 @@ namespace Electronova.Actors
 
             StringName moveState = Strings.None;
 
-            if (inputState.Move.LengthSquared() > 0.001f)
+            if (direction.Value.LengthSquared() > 0.001f)
             {
-                float angle = Mathf.RadToDeg(inputState.Move.AngleTo(Vector2.Up));
+                float angle = Mathf.RadToDeg(direction.Value.AngleTo(Vector2.Up));
 
                 if (angle <= -135f || angle >= 135)
                 {
@@ -62,9 +60,8 @@ namespace Electronova.Actors
                 selectedChild.Tick();
                 return;
             }
-            else
+            else if (defaultFirstChild)
             {
-                //if no valid children, use first one
                 selectedChild = (IStateTree)GetChild(0);
                 selectedChild?.Tick();
             }

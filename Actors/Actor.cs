@@ -27,7 +27,7 @@ namespace Electronova.Actors
         public float DeltaStep { get; private set; }
 
         //Used for testing
-        [Export] StateString actorState;
+        /*[Export] StateString actorState;
         [Export] StateString fluidState;
         [Export] StateString contactState;
         [Export] StateString inputState;

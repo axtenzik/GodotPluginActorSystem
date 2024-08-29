@@ -15,10 +15,7 @@ namespace Electronova.Actors
         [ExportCategory("Rotator")]
         [Export] Actor parent;
 
-        [ExportCategory("State Tree")]
-        [Export] StringName rotatorState = null;
-
-        public StringName State => rotatorState;
+        public StringName State => Name;
 
         Vector3 forwardAxis;
 

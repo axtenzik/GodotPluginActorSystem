@@ -23,10 +23,7 @@ namespace Electronova.Actors
             }
         }
 
-        [ExportCategory("State Tree")]
-        [Export] StringName counterState = null;
-
-        public StringName State => counterState;
+        public StringName State => Name;
 
         private StringName before;
         private float maxTime;

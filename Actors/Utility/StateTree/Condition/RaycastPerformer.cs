@@ -6,10 +6,7 @@ namespace Electronova.Actors
 {
 	public partial class RaycastPerformer : Node, IStateTree
 	{
-		[ExportCategory("State Tree")]
-        [Export] StringName selectorState = null;
-
-        public StringName State => selectorState;
+        public StringName State => Name;
 
 		[ExportCategory("Actor")]
         [Export] Actor parent;

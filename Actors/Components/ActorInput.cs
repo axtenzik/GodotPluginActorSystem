@@ -1,16 +1,14 @@
 using Electronova.Generic;
 using Godot;
 using Godot.Collections;
-using System;
 
 namespace Electronova.Actors
 {
     [Tool]
     public partial class ActorInput : Node
     {
-        [Export] InputState inputState;
-
-        [Export] Array<StringName> stringNames;
+        [Export] Vector2Node move;
+        [Export] Vector2Node aim;
         [Export] Array<BoolNode> boolNodes;
         [Export] float bufferTimer = 0.1f;
 
@@ -18,7 +16,7 @@ namespace Electronova.Actors
 
         public override void _Ready()
         {
-            currentBuffer.Resize(Math.Min(stringNames.Count, boolNodes.Count));
+            currentBuffer.Resize(boolNodes.Count);
         }
 
         public override void _Process(double delta)
@@ -28,21 +26,19 @@ namespace Electronova.Actors
                 return;
             }
 
-            ClearBuffer();
+            //ClearBuffer();
 
-            inputState.Move = Input.GetVector(Strings.MoveLeft, Strings.MoveRight, Strings.MoveForward, Strings.MoveBackward);
-            inputState.Aim = Input.GetVector(Strings.AimLeft, Strings.AimRight, Strings.AimDown, Strings.AimUp);
-            
-            if (Input.IsActionJustPressed(Strings.Jump))
+            move.Value = Input.GetVector(Strings.MoveLeft, Strings.MoveRight, Strings.MoveForward, Strings.MoveBackward);
+            aim.Value = Input.GetVector(Strings.AimLeft, Strings.AimRight, Strings.AimDown, Strings.AimUp);
+
+            /*if (Input.IsActionJustPressed(Strings.Jump))
             {
                 inputState.State = Strings.Jump;
-            }
+            }*/
 
-            int loopMax = Math.Min(stringNames.Count, boolNodes.Count);
-
-            for (int i = 0; i < loopMax; i++)
+            for (int i = 0; i < boolNodes.Count; i++)
             {
-                if (Input.IsActionJustPressed(stringNames[i]))
+                if (Input.IsActionPressed(boolNodes[i].Name))
                 {
                     boolNodes[i].Value = true;
                     currentBuffer[i] = bufferTimer;
@@ -66,9 +62,8 @@ namespace Electronova.Actors
         /// </summary>
         public void ClearBuffer()
         {
-            inputState.State = Strings.None;
-            inputState.Aim = Vector2.Zero;
-            inputState.Move = Vector2.Zero;
+            aim.Value = Vector2.Zero;
+            move.Value = Vector2.Zero;
         }
     }
 }

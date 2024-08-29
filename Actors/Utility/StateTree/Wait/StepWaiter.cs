@@ -21,10 +21,7 @@ namespace Electronova.Actors
 
         [Export] StateString resetCheck;
 
-        [ExportCategory("State Tree")]
-        [Export] StringName counterState = null;
-
-        public StringName State => counterState;
+        public StringName State => Name;
 
         private StringName before;
         private int maxCount;

@@ -6,6 +6,6 @@ namespace Electronova.Generic
 	[Tool]
 	public partial class IntNode : Node
 	{
-		[Export] public int Value { get; set; }
+		public int Value { get; set; }
 	}
 }

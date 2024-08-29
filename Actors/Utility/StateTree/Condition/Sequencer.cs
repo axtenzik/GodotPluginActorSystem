@@ -6,10 +6,7 @@ namespace Electronova.Actors
     [Tool]
     public partial class Sequencer : Node, IStateTree
     {
-        [ExportCategory("State Tree")]
-        [Export] StringName sequencerState = null;
-
-        public virtual StringName State => sequencerState;
+        public virtual StringName State => Name;
 
         public override string[] _GetConfigurationWarnings()
         {
@@ -24,7 +21,7 @@ namespace Electronova.Actors
 
         public virtual void Tick()
         {
-            IStateTree selectedChild = null;
+            IStateTree selectedChild = null; //VSCode don't like this here for some reason, "Unnecessary" apparently
             for (int i = 0; i < GetChildCount(); i++)
             {
                 selectedChild = (IStateTree)GetChild(i);

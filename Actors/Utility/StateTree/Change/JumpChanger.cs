@@ -10,18 +10,17 @@ namespace Electronova.Actors
         [ExportCategory("JumpChanger")]
         [Export] JumpStats jumpStats;
 
-        [ExportCategory("State Tree")]
-        [Export] StringName changerState = null;
-
         [ExportCategory("Changer")]
         [Export] StringName desiredState = null;
-        [Export] StateString StateToChange { get; set; }
+        [Export] StringNode StateToChange { get; set; }
 
-        [ExportCategory("Animation")]
-        [Export] StringName desiredAnimation = null;
-        [Export] AnimationPlayer Player { get; set; }
+        public StringName State => Name;
 
-        public StringName State => changerState;
+        public override string[] _GetConfigurationWarnings()
+        {
+            string[] strings = { "Can be changed out for IntNodes and Changer", "VariableNodes are now my Properties and Stats" };
+            return strings;
+        }
 
         public void Tick()
         {
@@ -31,23 +30,16 @@ namespace Electronova.Actors
             {
                 return;
             }
-            
+
             IStateTree selectedChild = (IStateTree)GetChild(0);
             selectedChild?.Tick();
         }
 
         private void Change()
         {
-            /*if (jumpStats.StepsSinceLastGrounded > 1 || jumpStats.StepsSinceLastJump > 2)
-            {
-                Player?.Play(desiredAnimation);
-                StateToChange.State = desiredState;
-            }*/
-
             if (jumpStats.StepsSinceLastJump > 1)
             {
-                StateToChange.State = desiredState;
-                Player?.Play(desiredAnimation);
+                StateToChange.Value = desiredState;
             }
         }
     }

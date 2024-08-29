@@ -67,8 +67,11 @@ namespace Electronova
 
         private void GenericAdd()
         {
-            Script script = GD.Load<Script>("res://addons/Electronova/Generic/StateString.cs");
-            Texture2D texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateString.png");
+            Script script;
+            Texture2D texture;
+
+            script = GD.Load<Script>("res://addons/Electronova/Generic/StateString.cs");
+            texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateString.png");
             AddCustomType("StateString", "Node", script, texture);
         }
 
@@ -130,9 +133,9 @@ namespace Electronova
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Sequencer.png");
             AddCustomType("Sequencer", "Node", script, texture);
 
-            script = GD.Load<Script>("res://addons/Electronova/Actors/Utility/StateTree/Condition/StateSelector.cs");
+            script = GD.Load<Script>("res://addons/Electronova/Actors/Utility/StateTree/Condition/StringSelector.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Selector.png");
-            AddCustomType("StateSelector", "Node", script, texture);
+            AddCustomType("StringSelector", "Node", script, texture);
 
             script = GD.Load<Script>("res://addons/Electronova/Actors/Utility/StateTree/Wait/StepWaiter.cs");
             texture = GD.Load<Texture2D>("res://addons/Electronova/Icons/Generic/StateTree/Counter.png");
@@ -157,7 +160,7 @@ namespace Electronova
             RemoveCustomType("MovementPerformer");
             RemoveCustomType("MoveRotator");
             RemoveCustomType("Sequencer");
-            RemoveCustomType("StateSelector");
+            RemoveCustomType("StringSelector");
             RemoveCustomType("StepWaiter");
             RemoveCustomType("TimeWaiter");
         }

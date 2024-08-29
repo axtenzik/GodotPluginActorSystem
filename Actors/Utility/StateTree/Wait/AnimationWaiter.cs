@@ -9,7 +9,6 @@ namespace Electronova.Actors
     public partial class AnimationWaiter : Node, IStateTree
     {
         [ExportCategory("State Tree")]
-        [Export] StringName waiterState = null;
         [Export] StateString ChildStateType { get; set; }
 
         [ExportCategory("AnimationWaiter")]
@@ -17,7 +16,7 @@ namespace Electronova.Actors
         [Export] StringName animationToWait = null;
         [Export] AnimationPlayer Player { get; set; }
 
-        public StringName State => waiterState;
+        public StringName State => Name;
 
         public void Tick()
         {
@@ -34,28 +33,14 @@ namespace Electronova.Actors
             {
                 return;
             }
-            
-            IStateTree selectedChild = null;
-            foreach (IStateTree child in GetChildren().Cast<IStateTree>())
-            {
-                if (child.State == ChildStateType.State)
-                {
-                    selectedChild = child;
-                    break;
-                }
-            }
 
-            if (selectedChild != null)
+            if (GetChildCount() == 0)
             {
-                selectedChild.Tick();
                 return;
             }
-            else
-            {
-                //if no valid children, use first one
-                selectedChild = (IStateTree)GetChild(0);
-                selectedChild?.Tick();
-            }
+
+            IStateTree selectedChild = (IStateTree)GetChild(0);
+            selectedChild?.Tick();
         }
     }
 }

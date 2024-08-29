@@ -10,19 +10,16 @@ namespace Electronova.Actors
     [Tool]
     public partial class MovementPerformer : Node, IStateTree
     {
-        [ExportCategory("State Tree")]
-        [Export] StringName performerState = null;
-
         [ExportCategory("Actor")]
         [Export] Actor parent;
-        [Export] InputState inputState;
+        [Export] Vector2Node move;
         [Export] ActorContacts actorContacts;
 
         [ExportCategory("Movement Type")]
         [Export] MovementProperties movementProperties = null;
         [Export] bool projectOntoGround = true;
         
-        public StringName State => performerState;
+        public StringName State => Name;
 
         Vector3 forwardAxis;
         Vector3 rightAxis;
@@ -88,7 +85,7 @@ namespace Electronova.Actors
                 //desiredVelocity = new Vector3(playerInput.X, 0, playerInput.Y) * maxSpeed;
             }//*/
 
-            desiredVelocity = new Vector3(inputState.Move.X, 0, inputState.Move.Y) * movementProperties.MaxSpeed;
+            desiredVelocity = new Vector3(move.Value.X, 0, move.Value.Y) * movementProperties.MaxSpeed;
             //desiredVelocity = (forwardAxis * parent.Inputter.CurrentMove.Y + rightAxis * parent.Inputter.CurrentMove.X) * movementProperties.MaxSpeed;
         }
 

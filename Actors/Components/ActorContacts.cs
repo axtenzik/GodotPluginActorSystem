@@ -13,7 +13,7 @@ namespace Electronova.Actors
 
         [ExportCategory("StateStrings")]
         //[Export] public StateString InFluidState { get; set; }
-        [Export] public StateString ContactState { get; set; }
+        [Export] public StringNode ContactState { get; set; }
 
         [ExportCategory("Ground Handling")]
         [Export(PropertyHint.Range, "0, 100")] float maxSnapSpeed = 100f;
@@ -55,7 +55,7 @@ namespace Electronova.Actors
 
         private void Clear()
         {
-            ContactState.State = Strings.None;
+            ContactState.Value = Strings.None;
             groundContactCount = steepContactCount = 0;
             contactNormal = steepNormal = Vector3.Zero;
         }
@@ -104,23 +104,23 @@ namespace Electronova.Actors
 
             if (groundContactCount >= 1)
             {
-                ContactState.State = Strings.OnGround;
+                ContactState.Value = Strings.OnGround;
             }
             else if (steepContactCount >= 1)
             {
-                ContactState.State = Strings.OnSteep;
+                ContactState.Value = Strings.OnSteep;
             }
             else if (wallContactCount >= 1)
             {
-                ContactState.State = Strings.OnWall;
+                ContactState.Value = Strings.OnWall;
             }
             else if (ceilingContactCount >= 1)
             {
-                ContactState.State = Strings.OnCeiling;
+                ContactState.Value = Strings.OnCeiling;
             }
             else
             {
-                ContactState.State = Strings.None;
+                ContactState.Value = Strings.None;
             }
         }
 
@@ -184,7 +184,7 @@ namespace Electronova.Actors
             JumpStatistics.AddGroundedStep();
             JumpStatistics.AddJumpStep();
 
-            bool onGround = ContactState.State == Strings.OnGround;
+            bool onGround = ContactState.Value == Strings.OnGround;
 
             if (onGround || SnapToGround() || CheckSteepContacts())
             {
