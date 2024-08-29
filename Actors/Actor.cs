@@ -103,7 +103,7 @@ namespace Electronova.Actors
 
         public void SetVelocity(Vector3 velocity)
         {
-            Velocity = velocity;
+            LinearVelocity = velocity;
         }
     }
 }

@@ -10,6 +10,9 @@ namespace Electronova.Actors
     [Tool]
     public partial class MovementPerformer : Node, IStateTree
     {
+        [ExportCategory("State Tree")]
+        [Export] StringName performerState = null;
+
         [ExportCategory("Actor")]
         [Export] Actor parent;
         [Export] InputState inputState;
@@ -17,10 +20,8 @@ namespace Electronova.Actors
 
         [ExportCategory("Movement Type")]
         [Export] MovementProperties movementProperties = null;
-
-        [ExportCategory("State Tree")]
-        [Export] StringName performerState = null;
-
+        [Export] bool projectOntoGround = true;
+        
         public StringName State => performerState;
 
         Vector3 forwardAxis;
@@ -47,8 +48,8 @@ namespace Electronova.Actors
             /*Vector3 xAxis = ProjectDirectionOnPlane(rightAxis, contactNormal);
             Vector3 zAxis = ProjectDirectionOnPlane(forwardAxis, contactNormal);*/
 
-            Vector3 xAxis = rightAxis.ProjectOntoPlane(actorContacts.ContactNormal);
-            Vector3 zAxis = forwardAxis.ProjectOntoPlane(actorContacts.ContactNormal);
+            Vector3 xAxis = projectOntoGround ? rightAxis.ProjectOntoPlane(actorContacts.ContactNormal) : rightAxis;
+            Vector3 zAxis = projectOntoGround ? forwardAxis.ProjectOntoPlane(actorContacts.ContactNormal) : forwardAxis;
 
             float currentX = parent.Velocity.Dot(xAxis);
             float currentZ = parent.Velocity.Dot(zAxis);

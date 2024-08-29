@@ -1,5 +1,6 @@
 using Electronova.Generic;
 using Godot;
+using Godot.Collections;
 using System;
 
 namespace Electronova.Actors
@@ -8,6 +9,17 @@ namespace Electronova.Actors
     public partial class ActorInput : Node
     {
         [Export] InputState inputState;
+
+        [Export] Array<StringName> stringNames;
+        [Export] Array<BoolNode> boolNodes;
+        [Export] float bufferTimer = 0.1f;
+
+        Array<float> currentBuffer = new();
+
+        public override void _Ready()
+        {
+            currentBuffer.Resize(Math.Min(stringNames.Count, boolNodes.Count));
+        }
 
         public override void _Process(double delta)
         {
@@ -24,6 +36,28 @@ namespace Electronova.Actors
             if (Input.IsActionJustPressed(Strings.Jump))
             {
                 inputState.State = Strings.Jump;
+            }
+
+            int loopMax = Math.Min(stringNames.Count, boolNodes.Count);
+
+            for (int i = 0; i < loopMax; i++)
+            {
+                if (Input.IsActionJustPressed(stringNames[i]))
+                {
+                    boolNodes[i].Value = true;
+                    currentBuffer[i] = bufferTimer;
+                }
+                else
+                {
+                    if (currentBuffer[i] <= 0f)
+                    {
+                        boolNodes[i].Value = false;
+                    }
+                    else
+                    {
+                        currentBuffer[i] -= (float)delta;
+                    }
+                }
             }
         }
 
