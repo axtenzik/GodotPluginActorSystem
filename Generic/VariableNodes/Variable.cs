@@ -4,8 +4,8 @@ using System;
 namespace Electronova.Generic
 {
 	[GlobalClass, Icon("res://addons/Electronova/Icons/Generic/VariableNode.png")]
-	public partial class FloatNode : Variable
+	public abstract partial class Variable : Node
 	{
-		public float Value { get; set; }
+		
 	}
 }

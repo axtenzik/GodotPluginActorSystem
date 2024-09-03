@@ -4,12 +4,10 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class BoolSelector : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
+    public partial class BoolSelector : StateTree
     {
         [Export] BoolNode ChildBool { get; set; }
-
-        public StringName State => Name;
 
         public override string[] _GetConfigurationWarnings()
         {
@@ -22,22 +20,17 @@ namespace Electronova.Actors
             return Array.Empty<string>();
         }
 
-        public void Tick()
+        public override void Tick()
         {
             if (GetChildCount() == 0)
             {
                 return;
             }
 
-            IStateTree selectedChild = null;
+            StateTree selectedChild = null;
             if (ChildBool.Value)
             {
-                if (GetChildCount() == 0)
-                {
-                    return;
-                }
-
-                selectedChild = (IStateTree)GetChild(0);
+                selectedChild = (StateTree)GetChild(0);
             }
             else
             {
@@ -46,7 +39,7 @@ namespace Electronova.Actors
                     return;
                 }
 
-                selectedChild = (IStateTree)GetChild(1);
+                selectedChild = (StateTree)GetChild(1);
             }
 
             selectedChild?.Tick();

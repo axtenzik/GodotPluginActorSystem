@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class TimeWaiter : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png")]
+    public partial class TimeWaiter : StateTree
     {
         [ExportCategory("TimeWaiter")]
         [Export] Actor parent;
-        [Export] StateString resetCheck;
+        [Export] StringNode resetCheck;
 
         [Export(PropertyHint.Range, "0, 100")]
         public float MaxTime
@@ -22,8 +22,6 @@ namespace Electronova.Actors
                 UpdateConfigurationWarnings();
             }
         }
-
-        public StringName State => Name;
 
         private StringName before;
         private float maxTime;
@@ -45,9 +43,9 @@ namespace Electronova.Actors
             return strings;
         }
 
-        public void Tick()
+        public override void Tick()
         {
-            before = resetCheck.State;
+            before = resetCheck.Value;
 
             if (currentCount < maxTime)
             {
@@ -58,7 +56,7 @@ namespace Electronova.Actors
                     return;
                 }
 
-                IStateTree selectedChild = (IStateTree)GetChild(1);
+                StateTree selectedChild = (StateTree)GetChild(1);
                 selectedChild?.Tick();
             }
             else
@@ -68,10 +66,10 @@ namespace Electronova.Actors
                     return;
                 }
 
-                IStateTree selectedChild = (IStateTree)GetChild(0);
+                StateTree selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
 
-                if (before == resetCheck.State)
+                if (before == resetCheck.Value)
                 {
                     return;
                 }

@@ -3,8 +3,8 @@ using System;
 
 namespace Electronova.Generic
 {
-    [Tool]
-    public partial class StringNode : Node
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/VariableNode.png")]
+    public partial class StringNode : Variable
     {
         public StringName Value { get; set; }
     }

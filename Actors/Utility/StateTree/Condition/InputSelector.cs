@@ -6,13 +6,11 @@ using System.Linq;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class InputSelector : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
+    public partial class InputSelector : StateTree
     {
         [Export] Array<BoolNode> boolNodes;
         [Export] bool defaultFirstChild = true;
-
-        public StringName State => Name;
 
         public override string[] _GetConfigurationWarnings()
         {
@@ -25,14 +23,14 @@ namespace Electronova.Actors
             return System.Array.Empty<string>();
         }
 
-        public void Tick()
+        public override void Tick()
         {
             if (GetChildCount() == 0)
             {
                 return;
             }
 
-            foreach (IStateTree child in GetChildren().Cast<IStateTree>())
+            foreach (StateTree child in GetChildren().Cast<StateTree>())
             {
                 for (int i = 0; i < boolNodes.Count; i++)
                 {
@@ -46,7 +44,7 @@ namespace Electronova.Actors
 
             if (defaultFirstChild)
             {
-                IStateTree selectedChild = (IStateTree)GetChild(0);
+                StateTree selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
             }
         }

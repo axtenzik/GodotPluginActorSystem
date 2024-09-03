@@ -5,14 +5,13 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorContacts.png")]
     public partial class ActorContacts : Node
     {
         [Export] Actor Parent { get; set; }
         [Export] JumpStats JumpStatistics { get; set; }
 
-        [ExportCategory("StateStrings")]
-        //[Export] public StateString InFluidState { get; set; }
+        [ExportCategory("StringNode")]
         [Export] public StringNode ContactState { get; set; }
 
         [ExportCategory("Ground Handling")]
@@ -24,7 +23,7 @@ namespace Electronova.Actors
         [Export(PropertyHint.Layers3DPhysics)] public int ProbeMask { get; set; }
         [Export(PropertyHint.Layers3DPhysics)] public int WaterMask { get; set; }
         [Export(PropertyHint.Layers3DPhysics)] public int TraversalMask { get; set; }
-        
+
         Vector3 contactNormal, steepNormal, wallNormal, ceilingNormal;
         int groundContactCount, steepContactCount, wallContactCount, ceilingContactCount;
         float minGroundDotProduct, minTraversalDotProduct;
@@ -57,7 +56,9 @@ namespace Electronova.Actors
         {
             ContactState.Value = Strings.None;
             groundContactCount = steepContactCount = 0;
-            contactNormal = steepNormal = Vector3.Zero;
+            contactNormal = steepNormal = Parent.ConnectedVelocity = Vector3.Zero;
+            Parent.PreviousBody = Parent.ConnectedBody;
+            Parent.ConnectedBody = null;
         }
 
         bool CheckSteepContacts()
@@ -78,7 +79,7 @@ namespace Electronova.Actors
 
         void EvaluateCollisions()
         {
-            //Early return due to first physics frame being before actor sets BodyState
+            //Early return as first physics frame can be before actor sets BodyState
             if (Parent.BodyState == null)
             {
                 return;
@@ -94,11 +95,19 @@ namespace Electronova.Actors
                 {
                     groundContactCount++;
                     contactNormal += normal;
+
+                    RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
+                    Parent.ConnectedBody = rigidBody;
                 }
                 else if (upDot > -0.01f)
                 {
                     steepContactCount++;
                     steepNormal += normal;
+                    if (groundContactCount == 0)
+                    {
+                        RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
+                        Parent.ConnectedBody = rigidBody;
+                    }
                 }
             }
 
@@ -175,6 +184,10 @@ namespace Electronova.Actors
                 velocity -= Parent.Velocity; //current velocity
                 Parent.AddVelocity(velocity); //Once added should be desired velocity
             }
+
+            //I hate I have to cast to then cast again, Why godot why???????
+            RigidBody3D rigidBody = (GodotObject)result["collider"] as RigidBody3D;
+            Parent.ConnectedBody = rigidBody;
 
             return true;
         }

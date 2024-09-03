@@ -5,13 +5,11 @@ using System.Linq;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class StringSelector : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
+    public partial class StringSelector : StateTree
     {
         [Export] StringNode ChildStateType { get; set; }
         [Export] bool defaultFirstChild = true;
-
-        public StringName State => Name;
 
         public override string[] _GetConfigurationWarnings()
         {
@@ -24,14 +22,14 @@ namespace Electronova.Actors
             return Array.Empty<string>();
         }
 
-        public void Tick()
+        public override void Tick()
         {
             if (GetChildCount() == 0)
             {
                 return;
             }
 
-            foreach (IStateTree child in GetChildren().Cast<IStateTree>())
+            foreach (StateTree child in GetChildren().Cast<StateTree>())
             {
                 if (child.State == ChildStateType.Value)
                 {
@@ -42,7 +40,7 @@ namespace Electronova.Actors
 
             if (defaultFirstChild)
             {
-                IStateTree selectedChild = (IStateTree)GetChild(0);
+                StateTree selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
             }
         }

@@ -3,8 +3,8 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class MotionPerformer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
+    public partial class MotionPerformer : StateTree
     {
         [ExportCategory("Actor")]
         [Export] Actor Parent;
@@ -15,16 +15,14 @@ namespace Electronova.Actors
         [Export] float duration;
         [Export] Vector3 direction;
 
-        public StringName State => Name;
-
-        public void Tick()
+        public override void Tick()
         {
             if (GetChildCount() == 0)
             {
                 return;
             }
             
-            IStateTree selectedChild = (IStateTree)GetChild(0);
+            StateTree selectedChild = (StateTree)GetChild(0);
             selectedChild?.Tick();
         }
     }

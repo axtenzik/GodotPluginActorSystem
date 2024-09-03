@@ -6,46 +6,22 @@ using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/Actor.png")]
     public partial class Actor : RigidBody3D
     {
         [Export] public Node3D ControllingCamera { get; private set; }
-        [Export] Node UtilityRoot
-        {
-            get => (Node)utilityRoot;
-            set
-            {
-                utilityRoot = (IUtilityRoot)value;
-                UpdateConfigurationWarnings();
-            }
-        }
+        [Export] ActorController actorController;
 
+        public RigidBody3D ConnectedBody, PreviousBody;
         public PhysicsDirectBodyState3D BodyState { get; private set; }
         public Vector3 Force { get; private set; }
         public Vector3 Velocity { get; private set; }
         public Vector3 UpAxis { get; private set; }
         public float DeltaStep { get; private set; }
 
-        //Used for testing
-        /*[Export] StateString actorState;
-        [Export] StateString fluidState;
-        [Export] StateString contactState;
-        [Export] StateString inputState;
-        [Export] JumpStats jumpstat;//*/
-
-        private Vector3 bufferedVelocity;
-        private IUtilityRoot utilityRoot;
-
-        public override string[] _GetConfigurationWarnings()
-        {
-            List<String> list = new();
-            if (utilityRoot == null)
-            {
-                list.Add("Utility Root not set to a valid instance of IUtilityRoot");
-            }
-            string[] strings = list.ToArray();
-            return strings;
-        }
+        //private Vector3 bufferedVelocity;
+        public Vector3 ConnectedVelocity;
+        private Vector3 connectedWorldPosition;
 
         public override void _Ready()
         {
@@ -62,21 +38,36 @@ namespace Electronova.Actors
             Velocity = state.LinearVelocity;
             BodyState = state;
 
-            Velocity += bufferedVelocity;
-            bufferedVelocity = Vector3.Zero;
+            //Velocity += bufferedVelocity;
+            //bufferedVelocity = Vector3.Zero;
 
-            utilityRoot?.Tick();
+            if (ConnectedBody != null)
+            {
+                if (ConnectedBody.FreezeMode == FreezeModeEnum.Kinematic || ConnectedBody.Mass >= Mass)
+                {
+                    //UpdateConnectionState();
+                    ConnectedVelocity = ConnectedBody.LinearVelocity;
+                }
+            }
 
+            actorController?.Start();
+
+            //bufferedVelocity += Gravity.GetGravity(Transform.Origin) * DeltaStep;
             Velocity += Gravity.GetGravity(Transform.Origin) * DeltaStep;
 
             state.LinearVelocity = Velocity;
-            //GD.Print("Actor: " + actorState.State);
-            //GD.Print("Fluid: " + fluidState.State);
-            //GD.Print("Contact: " + contactState.State);
-            //GD.Print("Input: " + inputState.State);
-            //GD.Print("Contacts: " + BodyState.GetContactCount());
-            //GD.Print(jumpstat.StepsSinceLastJump);
-            //GD.Print("");
+        }
+
+        private void UpdateConnectionState()
+        {
+            if (ConnectedBody == PreviousBody)
+            {
+                Vector3 connectionMovement = ConnectedBody.Position - connectedWorldPosition;
+                ConnectedVelocity = connectionMovement / DeltaStep;
+                GD.Print("Linear: " + ConnectedBody.LinearVelocity);
+                GD.Print("Calcul: " + ConnectedVelocity);
+            }
+            connectedWorldPosition = ConnectedBody.Position;
         }
 
         public void AddForce(Vector3 deltaForce)
@@ -86,7 +77,13 @@ namespace Electronova.Actors
 
         public void AddVelocity(Vector3 deltaVelocity)
         {
-            bufferedVelocity += deltaVelocity;
+            //bufferedVelocity += deltaVelocity;
+            Velocity += deltaVelocity;
+        }
+
+        public void SetCamera(Node3D camera)
+        {
+            ControllingCamera = camera;
         }
 
         public void SetForce(Vector3 force)

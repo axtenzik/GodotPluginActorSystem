@@ -3,7 +3,7 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorStats.png")]
     public partial class JumpProperties : Node
     {
         [Export(PropertyHint.Range, "0, 1")] public float CoyoteTime { get; set; }

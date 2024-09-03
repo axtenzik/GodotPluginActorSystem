@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class StepWaiter : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png")]
+    public partial class StepWaiter : StateTree
     {
         [Export(PropertyHint.Range, "0, 100")]
         public int MaxCount
@@ -19,9 +19,7 @@ namespace Electronova.Actors
             }
         }
 
-        [Export] StateString resetCheck;
-
-        public StringName State => Name;
+        [Export] StringNode resetCheck;
 
         private StringName before;
         private int maxCount;
@@ -43,9 +41,9 @@ namespace Electronova.Actors
             return strings;
         }
 
-        public void Tick()
+        public override void Tick()
         {
-            before = resetCheck.State;
+            before = resetCheck.Value;
 
             if (currentCount < maxCount)
             {
@@ -56,7 +54,7 @@ namespace Electronova.Actors
                     return;
                 }
 
-                IStateTree selectedChild = (IStateTree)GetChild(1);
+                StateTree selectedChild = (StateTree)GetChild(1);
                 selectedChild?.Tick();
             }
             else
@@ -66,10 +64,10 @@ namespace Electronova.Actors
                     return;
                 }
 
-                IStateTree selectedChild = (IStateTree)GetChild(0);
+                StateTree selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
 
-                if (before == resetCheck.State)
+                if (before == resetCheck.Value)
                 {
                     return;
                 }

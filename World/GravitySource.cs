@@ -3,7 +3,7 @@ using System;
 
 namespace Electronova.World
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/World/Gravity.png")]
     public partial class GravitySource : Node3D
     {
         public override void _EnterTree()

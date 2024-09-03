@@ -4,7 +4,7 @@ using Godot.Collections;
 
 namespace Electronova.Actors
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorInput.png")]
     public partial class ActorInput : Node
     {
         [Export] Vector2Node move;

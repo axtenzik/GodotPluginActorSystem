@@ -3,6 +3,7 @@ using System;
 
 namespace Electronova.World
 {
+    [GlobalClass, Icon("res://addons/Electronova/Icons/World/Gravity.png")]
     public partial class GravityPlane : GravitySource
     {
         [Export] float gravity = 10f;

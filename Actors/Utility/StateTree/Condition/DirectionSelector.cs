@@ -5,16 +5,14 @@ using System.Linq;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class DirectionSelector : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
+    public partial class DirectionSelector : StateTree
     {
         [ExportCategory("Direction")]
         [Export] Vector2Node direction;
         [Export] bool defaultFirstChild = true;
 
-        public StringName State => Name;
-
-        public void Tick()
+        public override void Tick()
         {
             if (GetChildCount() == 0)
             {
@@ -45,8 +43,8 @@ namespace Electronova.Actors
                 }
             }
 
-            IStateTree selectedChild = null;
-            foreach (IStateTree child in GetChildren().Cast<IStateTree>())
+            StateTree selectedChild = null;
+            foreach (StateTree child in GetChildren().Cast<StateTree>())
             {
                 if (child.State == moveState)
                 {
@@ -58,11 +56,10 @@ namespace Electronova.Actors
             if (selectedChild != null)
             {
                 selectedChild.Tick();
-                return;
             }
             else if (defaultFirstChild)
             {
-                selectedChild = (IStateTree)GetChild(0);
+                selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
             }
         }

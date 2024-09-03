@@ -3,7 +3,7 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorStats.png")]
     public partial class JumpStats : Node
     {
         public int CurrentJump { get; private set; }

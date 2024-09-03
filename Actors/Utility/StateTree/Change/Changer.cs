@@ -4,30 +4,23 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class Changer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Changer.png")]
+    public partial class Changer : StateTree
     {
         [ExportCategory("Changer")]
         [Export] protected StringName desiredState = null;
-        [Export] protected StateString StateToChange { get; set; }
+        [Export] protected StringNode StateToChange { get; set; }
 
-        public StringName State => Name;
-
-        public virtual void Tick()
+        public override void Tick()
         {
             Change();
 
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
 
         private void Change()
         {
-            StateToChange.State = desiredState;
+            StateToChange.Value = desiredState;
         }
     }
 }

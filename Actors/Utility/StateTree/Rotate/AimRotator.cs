@@ -9,13 +9,11 @@ namespace Electronova.Actors
     /// Changes the actors rotation based on the look direction of the camera connected to the actor.
     /// If no camera is connected to the actor then the world forward axis is used instead.
     /// </summary>
-    [Tool]
-    public partial class AimRotator : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png")]
+    public partial class AimRotator : StateTree
     {
         [ExportCategory("Rotator")]
         [Export] Actor parent;
-
-        public StringName State => Name;
 
         Vector3 forwardAxis;
 
@@ -30,7 +28,7 @@ namespace Electronova.Actors
             return strings;
         }
 
-        public void Tick()
+        public override void Tick()
         {
             if (parent.ControllingCamera != null)
             {
@@ -56,14 +54,7 @@ namespace Electronova.Actors
 
             parent.SetRotation(lookBasis);
 
-            //If node has any children will try continuing down the tree through its first child.
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-            
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
     }
 }

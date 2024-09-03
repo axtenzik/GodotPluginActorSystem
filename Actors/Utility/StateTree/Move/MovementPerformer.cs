@@ -7,8 +7,8 @@ namespace Electronova.Actors
     /// <summary>
     /// State tree performer node that will move an actor toward a desired direction based on acceleration.
     /// </summary>
-    [Tool]
-    public partial class MovementPerformer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
+    public partial class MovementPerformer : StateTree
     {
         [ExportCategory("Actor")]
         [Export] Actor parent;
@@ -18,26 +18,17 @@ namespace Electronova.Actors
         [ExportCategory("Movement Type")]
         [Export] MovementProperties movementProperties = null;
         [Export] bool projectOntoGround = true;
-        
-        public StringName State => Name;
 
         Vector3 forwardAxis;
         Vector3 rightAxis;
         Vector3 desiredVelocity;
 
-        public void Tick()
+        public override void Tick()
         {
             FindDesiredVelocity();
             AdjustVelocity();
-            //Rotate();
 
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-            
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
 
         private void AdjustVelocity()
@@ -48,8 +39,12 @@ namespace Electronova.Actors
             Vector3 xAxis = projectOntoGround ? rightAxis.ProjectOntoPlane(actorContacts.ContactNormal) : rightAxis;
             Vector3 zAxis = projectOntoGround ? forwardAxis.ProjectOntoPlane(actorContacts.ContactNormal) : forwardAxis;
 
-            float currentX = parent.Velocity.Dot(xAxis);
-            float currentZ = parent.Velocity.Dot(zAxis);
+            //float currentX = parent.Velocity.Dot(xAxis);
+            //float currentZ = parent.Velocity.Dot(zAxis);
+
+            Vector3 relativeVelocity = parent.Velocity - parent.ConnectedVelocity;
+            float currentX = relativeVelocity.Dot(xAxis);
+            float currentZ = relativeVelocity.Dot(zAxis);
 
             //float acceleration = OnGround ? maxAcceleration : maxAirAcceleration;
             //float maxSpeedChange = acceleration * parent.DeltaStep;
@@ -87,36 +82,6 @@ namespace Electronova.Actors
 
             desiredVelocity = new Vector3(move.Value.X, 0, move.Value.Y) * movementProperties.MaxSpeed;
             //desiredVelocity = (forwardAxis * parent.Inputter.CurrentMove.Y + rightAxis * parent.Inputter.CurrentMove.X) * movementProperties.MaxSpeed;
-        }
-
-        private void Rotate()
-        {
-            if (parent.Velocity.LengthSquared() < 0.01f)
-            {
-                return;
-            }
-
-            Vector3 lookDirection = parent.Velocity.ProjectOntoPlane(parent.UpAxis);
-
-            //If LookDirection is zero then Basis.LookingAt() will error.
-            if (lookDirection == Vector3.Zero)
-            { 
-                return;
-            }
-
-            Basis lookBasis = Basis.LookingAt(lookDirection, parent.UpAxis);
-
-            parent.SetRotation(lookBasis);
-
-            /*Vector3 xLook = parent.UpAxis.Cross(parent.Velocity);
-            Vector3 zLook = xLook.Cross(parent.UpAxis);
-
-            if (xLook.LengthSquared() > 0.1f || zLook.LengthSquared() > 0.1f)
-            {
-                Basis lookBasis = Basis.LookingAt(zLook, parent.UpAxis);
-
-                parent.SetRotation(lookBasis);
-            }*/
         }
     }
 }

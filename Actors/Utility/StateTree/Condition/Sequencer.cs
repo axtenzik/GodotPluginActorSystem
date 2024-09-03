@@ -3,11 +3,9 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class Sequencer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Sequencer.png")]
+    public partial class Sequencer : StateTree
     {
-        public virtual StringName State => Name;
-
         public override string[] _GetConfigurationWarnings()
         {
             if (GetChildCount() == 0)
@@ -19,12 +17,12 @@ namespace Electronova.Actors
             return Array.Empty<string>();
         }
 
-        public virtual void Tick()
+        public override void Tick()
         {
-            IStateTree selectedChild = null; //VSCode don't like this here for some reason, "Unnecessary" apparently
+            StateTree selectedChild = null; //VSCode don't like this here for some reason, "Unnecessary" apparently
             for (int i = 0; i < GetChildCount(); i++)
             {
-                selectedChild = (IStateTree)GetChild(i);
+                selectedChild = (StateTree)GetChild(i);
                 selectedChild?.Tick();
             }
         }

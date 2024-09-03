@@ -4,14 +4,12 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class MoveRotator : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png")]
+    public partial class MoveRotator : StateTree
     {
         [Export] Actor parent;
 
-        public StringName State => Name;
-
-        public void Tick()
+        public override void Tick()
         {
             if (parent.Velocity.LengthSquared() < 0.01f)
             {
@@ -30,13 +28,7 @@ namespace Electronova.Actors
             parent.SetRotation(lookBasis);
             
 
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
     }
 }

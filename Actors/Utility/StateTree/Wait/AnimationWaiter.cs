@@ -5,20 +5,15 @@ using System.Linq;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class AnimationWaiter : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png")]
+    public partial class AnimationWaiter : StateTree
     {
-        [ExportCategory("State Tree")]
-        [Export] StateString ChildStateType { get; set; }
-
         [ExportCategory("AnimationWaiter")]
         [Export] StringName desiredAnimation = null;
         [Export] StringName animationToWait = null;
         [Export] AnimationPlayer Player { get; set; }
 
-        public StringName State => Name;
-
-        public void Tick()
+        public override void Tick()
         {
             if (Player.CurrentAnimation == animationToWait)
             {
@@ -29,18 +24,7 @@ namespace Electronova.Actors
                 Player.Play(desiredAnimation);
             }
 
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
     }
 }

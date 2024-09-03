@@ -3,8 +3,8 @@ using System;
 
 namespace Electronova.Generic
 {
-	[Tool]
-	public partial class Vector2Node : Node
+	[GlobalClass, Icon("res://addons/Electronova/Icons/Generic/VariableNode.png")]
+	public partial class Vector2Node : Variable
 	{
 		public Vector2 Value { get; set; }
 	}

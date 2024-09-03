@@ -5,11 +5,9 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class JumpPerformer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
+    public partial class JumpPerformer : StateTree
     {
-        //
-
         [ExportCategory("Actor")]
         [Export] Actor parent;
         [Export] ActorContacts actorContacts;
@@ -36,8 +34,6 @@ namespace Electronova.Actors
         
         private AnimationPlayer player;*/
 
-        public StringName State => Name;
-
         /*public override string[] _GetConfigurationWarnings()
         {
             List<String> list = new();
@@ -49,18 +45,12 @@ namespace Electronova.Actors
             return strings;
         }*/
 
-        public void Tick()
+        public override void Tick()
         {
             Jump();
             actorState.Value = setActorStateTo;
 
-            if (GetChildCount() == 0)
-            {
-                return;
-            }
-            
-            IStateTree selectedChild = (IStateTree)GetChild(0);
-            selectedChild?.Tick();
+            base.Tick();
         }
 
         void Jump()

@@ -4,11 +4,10 @@ using System;
 
 namespace Electronova.Actors
 {
-	public partial class RaycastPerformer : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
+	public partial class RaycastPerformer : StateTree
 	{
-        public StringName State => Name;
-
-		[ExportCategory("Actor")]
+        [ExportCategory("Actor")]
         [Export] Actor parent;
 
 		[ExportCategory("Raycast")]
@@ -17,7 +16,7 @@ namespace Electronova.Actors
 		[ExportGroup("Masks")]
         [Export(PropertyHint.Layers3DPhysics)] public int ProbeMask { get; set; }
 
-		public void Tick()
+		public override void Tick()
 		{
 			if (GetChildCount() == 0)
             {
@@ -38,17 +37,12 @@ namespace Electronova.Actors
                     return;
                 }
 
-                IStateTree selectedChild = (IStateTree)GetChild(1);
+                StateTree selectedChild = (StateTree)GetChild(1);
                 selectedChild?.Tick();
             }
             else
             {
-                if (GetChildCount() == 0)
-                {
-                    return;
-                }
-
-                IStateTree selectedChild = (IStateTree)GetChild(0);
+                StateTree selectedChild = (StateTree)GetChild(0);
                 selectedChild?.Tick();
             }
 		}

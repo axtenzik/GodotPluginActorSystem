@@ -3,12 +3,10 @@ using System;
 
 namespace Electronova.Actors
 {
-    [Tool]
-    public partial class Empty : Node, IStateTree
+    [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Empty.png")]
+    public partial class Empty : StateTree
     {
-        public virtual StringName State => Name;
-
-        public virtual void Tick()
+        public override void Tick()
         {
             return;
         }
