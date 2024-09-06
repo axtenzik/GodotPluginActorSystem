@@ -39,12 +39,12 @@ namespace Electronova.Actors
             Vector3 xAxis = projectOntoGround ? rightAxis.ProjectOntoPlane(actorContacts.ContactNormal) : rightAxis;
             Vector3 zAxis = projectOntoGround ? forwardAxis.ProjectOntoPlane(actorContacts.ContactNormal) : forwardAxis;
 
-            //float currentX = parent.Velocity.Dot(xAxis);
-            //float currentZ = parent.Velocity.Dot(zAxis);
+            /*float currentX = parent.Velocity.Dot(xAxis);
+            float currentZ = parent.Velocity.Dot(zAxis);//*/
 
             Vector3 relativeVelocity = parent.Velocity - parent.ConnectedVelocity;
             float currentX = relativeVelocity.Dot(xAxis);
-            float currentZ = relativeVelocity.Dot(zAxis);
+            float currentZ = relativeVelocity.Dot(zAxis);//*/
 
             //float acceleration = OnGround ? maxAcceleration : maxAirAcceleration;
             //float maxSpeedChange = acceleration * parent.DeltaStep;

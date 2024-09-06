@@ -21,7 +21,8 @@ namespace Electronova.Actors
 
         //private Vector3 bufferedVelocity;
         public Vector3 ConnectedVelocity;
-        private Vector3 connectedWorldPosition;
+        private Vector3 connectedWorldPosition, connectedLocalPosition;
+        private Node3D parent;
 
         public override void _Ready()
         {
@@ -30,6 +31,7 @@ namespace Electronova.Actors
             ContactMonitor = true;
             MaxContactsReported = 5;
             LockRotation = true;
+            parent = GetParentNode3D();
         }
 
         public override void _IntegrateForces(PhysicsDirectBodyState3D state)
@@ -45,8 +47,8 @@ namespace Electronova.Actors
             {
                 if (ConnectedBody.FreezeMode == FreezeModeEnum.Kinematic || ConnectedBody.Mass >= Mass)
                 {
-                    //UpdateConnectionState();
-                    ConnectedVelocity = ConnectedBody.LinearVelocity;
+                    UpdateConnectionState();
+                    //CallDeferred(Node3D.MethodName.Reparent, ConnectedBody, true);
                 }
             }
 
@@ -62,12 +64,18 @@ namespace Electronova.Actors
         {
             if (ConnectedBody == PreviousBody)
             {
-                Vector3 connectionMovement = ConnectedBody.Position - connectedWorldPosition;
+                //Vector3 connectionMovement = ConnectedBody.Position - connectedWorldPosition;
+
+                Vector3 newGlobalPosition = ConnectedBody.Transform * connectedLocalPosition;
+                Vector3 connectionMovement = newGlobalPosition - connectedWorldPosition;
+
                 ConnectedVelocity = connectionMovement / DeltaStep;
-                GD.Print("Linear: " + ConnectedBody.LinearVelocity);
-                GD.Print("Calcul: " + ConnectedVelocity);
             }
-            connectedWorldPosition = ConnectedBody.Position;
+            
+            //connectedWorldPosition = ConnectedBody.Position;
+
+            connectedWorldPosition = Position;
+            connectedLocalPosition = connectedWorldPosition * ConnectedBody.Transform;
         }
 
         public void AddForce(Vector3 deltaForce)

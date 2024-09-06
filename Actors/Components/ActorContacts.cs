@@ -185,7 +185,7 @@ namespace Electronova.Actors
                 Parent.AddVelocity(velocity); //Once added should be desired velocity
             }
 
-            //I hate I have to cast to then cast again, Why godot why???????
+            //I hate I have to cast then cast again, Why godot why???????
             RigidBody3D rigidBody = (GodotObject)result["collider"] as RigidBody3D;
             Parent.ConnectedBody = rigidBody;
 
