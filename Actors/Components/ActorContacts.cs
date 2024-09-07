@@ -56,7 +56,8 @@ namespace Electronova.Actors
         {
             ContactState.Value = Strings.None;
             groundContactCount = steepContactCount = 0;
-            contactNormal = steepNormal = Parent.ConnectedVelocity = Vector3.Zero;
+            contactNormal = steepNormal = Vector3.Zero;
+            Parent.ConnectedVelocity = Parent.ConnectionPoint = Vector3.Zero;
             Parent.PreviousBody = Parent.ConnectedBody;
             Parent.ConnectedBody = null;
         }
@@ -98,6 +99,7 @@ namespace Electronova.Actors
 
                     RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
                     Parent.ConnectedBody = rigidBody;
+                    Parent.ConnectionPoint = Parent.BodyState.GetContactLocalPosition(i);
                 }
                 else if (upDot > -0.01f)
                 {
@@ -107,6 +109,7 @@ namespace Electronova.Actors
                     {
                         RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
                         Parent.ConnectedBody = rigidBody;
+                        Parent.ConnectionPoint = Parent.BodyState.GetContactLocalPosition(i);
                     }
                 }
             }
@@ -188,6 +191,7 @@ namespace Electronova.Actors
             //I hate I have to cast then cast again, Why godot why???????
             RigidBody3D rigidBody = (GodotObject)result["collider"] as RigidBody3D;
             Parent.ConnectedBody = rigidBody;
+            Parent.ConnectionPoint = (Vector3)result["position"];
 
             return true;
         }

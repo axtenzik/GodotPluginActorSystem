@@ -19,10 +19,8 @@ namespace Electronova.Actors
         public Vector3 UpAxis { get; private set; }
         public float DeltaStep { get; private set; }
 
-        //private Vector3 bufferedVelocity;
-        public Vector3 ConnectedVelocity;
+        public Vector3 ConnectedVelocity, ConnectionPoint;
         private Vector3 connectedWorldPosition, connectedLocalPosition;
-        private Node3D parent;
 
         public override void _Ready()
         {
@@ -31,7 +29,6 @@ namespace Electronova.Actors
             ContactMonitor = true;
             MaxContactsReported = 5;
             LockRotation = true;
-            parent = GetParentNode3D();
         }
 
         public override void _IntegrateForces(PhysicsDirectBodyState3D state)
@@ -64,18 +61,20 @@ namespace Electronova.Actors
         {
             if (ConnectedBody == PreviousBody)
             {
-                //Vector3 connectionMovement = ConnectedBody.Position - connectedWorldPosition;
-
+                //Turn point from local of previous body to global based on current transform
                 Vector3 newGlobalPosition = ConnectedBody.Transform * connectedLocalPosition;
                 Vector3 connectionMovement = newGlobalPosition - connectedWorldPosition;
 
                 ConnectedVelocity = connectionMovement / DeltaStep;
             }
-            
-            //connectedWorldPosition = ConnectedBody.Position;
 
-            connectedWorldPosition = Position;
-            connectedLocalPosition = connectedWorldPosition * ConnectedBody.Transform;
+            //Turn point to local of connectedBody
+            connectedWorldPosition = ConnectionPoint;
+
+            //Vector3 * Transform == Transform.Inverse * Vector3
+            //AfflineInverse used as Vector3 * Transform assumes basis is orthonormal
+            //scaling Transform makes basis non orthonormal. e.g. is don't work properly
+            connectedLocalPosition = ConnectedBody.Transform.AffineInverse() * connectedWorldPosition;
         }
 
         public void AddForce(Vector3 deltaForce)
