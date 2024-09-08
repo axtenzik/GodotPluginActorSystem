@@ -3,6 +3,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
     public partial class MotionPerformer : StateTree
     {
@@ -14,6 +15,11 @@ namespace Electronova.Actors
         [Export] float speed;
         [Export] float duration;
         [Export] Vector3 direction;
+
+        public override string[] _GetConfigurationWarnings()
+        {
+            return Array.Empty<string>();
+        }
 
         public override void Tick()
         {

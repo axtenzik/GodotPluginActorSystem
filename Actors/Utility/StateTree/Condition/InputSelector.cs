@@ -6,22 +6,12 @@ using System.Linq;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
     public partial class InputSelector : StateTree
     {
         [Export] Array<BoolNode> boolNodes;
         [Export] bool defaultFirstChild = true;
-
-        public override string[] _GetConfigurationWarnings()
-        {
-            if (GetChildCount() == 0)
-            {
-                string[] strings = { "End of State Tree path. Try adding State Tree nodes as children to add functionality!" };
-                return strings;
-            }
-
-            return System.Array.Empty<string>();
-        }
 
         public override void Tick()
         {

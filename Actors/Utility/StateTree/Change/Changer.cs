@@ -4,6 +4,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Changer.png")]
     public partial class Changer : StateTree
     {
@@ -11,16 +12,16 @@ namespace Electronova.Actors
         [Export] protected StringName desiredState = null;
         [Export] protected StringNode StateToChange { get; set; }
 
-        public override void Tick()
+        public override string[] _GetConfigurationWarnings()
         {
-            Change();
-
-            base.Tick();
+            return Array.Empty<string>();
         }
 
-        private void Change()
+        public override void Tick()
         {
             StateToChange.Value = desiredState;
+
+            base.Tick();
         }
     }
 }

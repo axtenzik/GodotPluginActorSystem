@@ -9,6 +9,7 @@ namespace Electronova.Actors
     /// Changes the actors rotation based on the look direction of the camera connected to the actor.
     /// If no camera is connected to the actor then the world forward axis is used instead.
     /// </summary>
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Rotator.png")]
     public partial class AimRotator : StateTree
     {

@@ -3,6 +3,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
     public partial class ImpulsePerformer : StateTree
     {
@@ -13,6 +14,11 @@ namespace Electronova.Actors
         [ExportCategory("Impulse")]
         [Export] float speed;
         [Export] Vector3 direction;
+
+        public override string[] _GetConfigurationWarnings()
+        {
+            return Array.Empty<string>();
+        }
 
         public override void Tick()
         {

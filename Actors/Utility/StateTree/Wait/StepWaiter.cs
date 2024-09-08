@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Waiter.png")]
     public partial class StepWaiter : StateTree
     {

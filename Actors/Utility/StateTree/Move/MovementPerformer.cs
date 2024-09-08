@@ -7,6 +7,7 @@ namespace Electronova.Actors
     /// <summary>
     /// State tree performer node that will move an actor toward a desired direction based on acceleration.
     /// </summary>
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
     public partial class MovementPerformer : StateTree
     {
@@ -22,6 +23,11 @@ namespace Electronova.Actors
         Vector3 forwardAxis;
         Vector3 rightAxis;
         Vector3 desiredVelocity;
+
+        public override string[] _GetConfigurationWarnings()
+        {
+            return Array.Empty<string>();
+        }
 
         public override void Tick()
         {

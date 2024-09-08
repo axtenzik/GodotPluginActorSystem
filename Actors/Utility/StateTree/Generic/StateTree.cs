@@ -3,10 +3,25 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorContacts.png")]
     public partial class StateTree : ActorController
     {
-        public StringName State => Name;
+        [Export] public StringName State 
+        { 
+            get
+            {
+                if (Name.IsEmpty)
+                {
+                    Name = this.GetType().Name;
+                }
+                return Name;
+            }
+            set
+            {
+                Name = value;
+            }
+        }
 
         public override string[] _GetConfigurationWarnings()
         {

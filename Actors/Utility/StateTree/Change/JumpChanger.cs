@@ -4,6 +4,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass,Icon("res://addons/Electronova/Icons/Generic/StateTree/Changer.png")]
     public partial class JumpChanger : StateTree
     {
@@ -22,17 +23,12 @@ namespace Electronova.Actors
 
         public override void Tick()
         {
-            Change();
-
-            base.Tick();
-        }
-
-        private void Change()
-        {
             if (jumpStats.StepsSinceLastJump > 1)
             {
                 StateToChange.Value = desiredState;
             }
+
+            base.Tick();
         }
     }
 }

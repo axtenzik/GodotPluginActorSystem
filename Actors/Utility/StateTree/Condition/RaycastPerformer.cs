@@ -4,6 +4,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Selector.png")]
 	public partial class RaycastPerformer : StateTree
 	{

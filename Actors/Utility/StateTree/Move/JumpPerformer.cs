@@ -5,6 +5,7 @@ using System;
 
 namespace Electronova.Actors
 {
+    [Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Generic/StateTree/Performer.png")]
     public partial class JumpPerformer : StateTree
     {
@@ -44,6 +45,11 @@ namespace Electronova.Actors
             string[] strings = list.ToArray();
             return strings;
         }*/
+
+        public override string[] _GetConfigurationWarnings()
+        {
+            return Array.Empty<string>();
+        }
 
         public override void Tick()
         {
