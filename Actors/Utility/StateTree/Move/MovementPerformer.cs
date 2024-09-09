@@ -48,7 +48,7 @@ namespace Electronova.Actors
             /*float currentX = parent.Velocity.Dot(xAxis);
             float currentZ = parent.Velocity.Dot(zAxis);//*/
 
-            Vector3 relativeVelocity = parent.Velocity - parent.ConnectedVelocity;
+            Vector3 relativeVelocity = parent.Velocity - actorContacts.ConnectedVelocity;
             float currentX = relativeVelocity.Dot(xAxis);
             float currentZ = relativeVelocity.Dot(zAxis);//*/
 

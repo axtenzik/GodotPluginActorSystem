@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Electronova.Actors
 {
+	[Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorStats.png")]
     public partial class MovementProperties : Node
     {

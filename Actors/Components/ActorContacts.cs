@@ -5,11 +5,13 @@ using System;
 
 namespace Electronova.Actors
 {
+	[Tool]
     [GlobalClass, Icon("res://addons/Electronova/Icons/Actor/ActorContacts.png")]
     public partial class ActorContacts : Node
     {
         [Export] Actor Parent { get; set; }
         [Export] JumpStats JumpStatistics { get; set; }
+        [Export] bool usePhysicsProcess = true;
 
         [ExportCategory("StringNode")]
         [Export] public StringNode ContactState { get; set; }
@@ -34,10 +36,36 @@ namespace Electronova.Actors
         public Vector3 WallNormal => wallNormal;
         public Vector3 CeilingNormal => ceilingNormal;
 
+        private RigidBody3D ConnectedBody, PreviousBody;
+        public Vector3 ConnectedVelocity;
+        private Vector3 connectionPoint, connectedWorldPosition, connectedLocalPosition;
+
         public override void _Ready()
         {
             minGroundDotProduct = Mathf.Cos(Mathf.DegToRad(maxGroundAngle));
             minTraversalDotProduct = Mathf.Cos(Mathf.DegToRad(maxTraversalAngle));
+            SetProcess(!usePhysicsProcess);
+            SetPhysicsProcess(usePhysicsProcess);
+        }
+
+        public override void _Process(double delta)
+        {
+            if (Engine.IsEditorHint())
+            {
+                return;
+            }
+
+            Clear();
+            EvaluateCollisions();
+            UpdateContacts();
+
+            if (ConnectedBody != null)
+            {
+                if (ConnectedBody.FreezeMode == RigidBody3D.FreezeModeEnum.Kinematic || ConnectedBody.Mass >= Parent.Mass)
+                {
+                    UpdateConnectionState();
+                }
+            }
         }
 
         public override void _PhysicsProcess(double delta)
@@ -50,6 +78,14 @@ namespace Electronova.Actors
             Clear();
             EvaluateCollisions();
             UpdateContacts();
+
+            if (ConnectedBody != null)
+            {
+                if (ConnectedBody.FreezeMode == RigidBody3D.FreezeModeEnum.Kinematic || ConnectedBody.Mass >= Parent.Mass)
+                {
+                    UpdateConnectionState();
+                }
+            }
         }
 
         private void Clear()
@@ -57,9 +93,9 @@ namespace Electronova.Actors
             ContactState.Value = Strings.None;
             groundContactCount = steepContactCount = 0;
             contactNormal = steepNormal = Vector3.Zero;
-            Parent.ConnectedVelocity = Parent.ConnectionPoint = Vector3.Zero;
-            Parent.PreviousBody = Parent.ConnectedBody;
-            Parent.ConnectedBody = null;
+            ConnectedVelocity = connectionPoint = Vector3.Zero;
+            PreviousBody = ConnectedBody;
+            ConnectedBody = null;
         }
 
         bool CheckSteepContacts()
@@ -98,8 +134,8 @@ namespace Electronova.Actors
                     contactNormal += normal;
 
                     RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
-                    Parent.ConnectedBody = rigidBody;
-                    Parent.ConnectionPoint = Parent.BodyState.GetContactLocalPosition(i);
+                    ConnectedBody = rigidBody;
+                    connectionPoint = Parent.BodyState.GetContactLocalPosition(i);
                 }
                 else if (upDot > -0.01f)
                 {
@@ -108,8 +144,8 @@ namespace Electronova.Actors
                     if (groundContactCount == 0)
                     {
                         RigidBody3D rigidBody = Parent.BodyState.GetContactColliderObject(i) as RigidBody3D;
-                        Parent.ConnectedBody = rigidBody;
-                        Parent.ConnectionPoint = Parent.BodyState.GetContactLocalPosition(i);
+                        ConnectedBody = rigidBody;
+                        connectionPoint = Parent.BodyState.GetContactLocalPosition(i);
                     }
                 }
             }
@@ -190,10 +226,30 @@ namespace Electronova.Actors
 
             //I hate I have to cast then cast again, Why godot why???????
             RigidBody3D rigidBody = (GodotObject)result["collider"] as RigidBody3D;
-            Parent.ConnectedBody = rigidBody;
-            Parent.ConnectionPoint = (Vector3)result["position"];
+            ConnectedBody = rigidBody;
+            connectionPoint = (Vector3)result["position"];
 
             return true;
+        }
+
+        private void UpdateConnectionState()
+        {
+            if (ConnectedBody == PreviousBody)
+            {
+                //Turn point from local of previous body to global based on current transform
+                Vector3 newGlobalPosition = ConnectedBody.Transform * connectedLocalPosition;
+                Vector3 connectionMovement = newGlobalPosition - connectedWorldPosition;
+
+                ConnectedVelocity = connectionMovement / Parent.DeltaStep;
+            }
+
+            //Turn point to local of connectedBody
+            connectedWorldPosition = connectionPoint;
+
+            //Vector3 * Transform == Transform.Inverse * Vector3
+            //AfflineInverse used as Vector3 * Transform assumes basis is orthonormal
+            //scaling Transform makes basis non orthonormal. e.g. is don't work properly
+            connectedLocalPosition = ConnectedBody.Transform.AffineInverse() * connectedWorldPosition;
         }
 
         void UpdateContacts()

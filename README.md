@@ -34,4 +34,4 @@ I am currently not open to contributions. This code is primarily being made for 
 ## Acknowledgements
 
 Jasper Flick (Catlike coding) - Unity Movement Tutorial
- - A lot of the movement code and feature is copied/based/inspired on this tutorial, this project started as an adaption of this tutorial, following the code and converting it to godot. Then it went on a tangent XD
+ - A lot of the movement code and features is copied/based/inspired on this tutorial, this project started as an adaption of this tutorial, following the code and converting it to godot. Then it went on a tangent XD
